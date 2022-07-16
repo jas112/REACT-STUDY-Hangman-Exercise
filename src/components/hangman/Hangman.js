@@ -27,6 +27,7 @@ class Hangman extends Component {
         answer: "apple" 
     };
     this.handleGuess = this.handleGuess.bind(this);
+    this.resetGame = this.resetGame.bind(this);
   }
 
   /** guessedWord: show current-state of word:
@@ -90,6 +91,21 @@ class Hangman extends Component {
     ));
   }
 
+  resetGame(){
+    this.setState(currState => {
+        let newState = {...currState};
+        newState.isWinner = false;
+        newState.isLoser = false;
+        newState.gameOver = false;
+        newState.nWrong = 0; 
+        newState.nRight = 0;
+        newState.guessed = new Set(); 
+        newState.answer = "apple"; 
+
+        return newState;
+    });
+  }
+
   render() {
     return (
         <div className='Hangman-container'>
@@ -104,6 +120,7 @@ class Hangman extends Component {
                 {/* <p>isLoser: {this.state.isLoser} isWinner: {this.state.isWinner}</p> */}
                 <p className='Hangman-btns'>{this.generateButtons()}</p>
             </div>
+            <button onClick={this.resetGame}>Reset Game</button>
         </div>
     )
   }
