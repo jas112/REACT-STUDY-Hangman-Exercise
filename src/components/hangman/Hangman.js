@@ -17,7 +17,15 @@ class Hangman extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { nWrong: 0, guessed: new Set(), answer: "apple" };
+    this.state = { 
+        isWinner: false,
+        isLoser: false,
+        gameOver: false,
+        nWrong: 0, 
+        nRight: 0,
+        guessed: new Set(), 
+        answer: "apple" 
+    };
     this.handleGuess = this.handleGuess.bind(this);
   }
 
@@ -36,19 +44,46 @@ class Hangman extends Component {
   */
   handleGuess(evt) {
     let ltr = evt.target.value;
-    this.setState(st => ({
-      guessed: st.guessed.add(ltr),
-      nWrong: st.nWrong + (st.answer.includes(ltr) ? 0 : 1)
-    }));
+    this.setState(st => {
+    //   guessed: st.guessed.add(ltr),
+    //   nWrong: st.nWrong + (st.answer.includes(ltr) ? 0 : 1),
+    //   nRight: this.guessedWord().filter(char => char != '_').length,
+    //   isLoser: st.nWrong >= st.answer.length,
+    //   isWinner: st.nRight == st.answer.length,
+    //   gameOver: ((st.nRight == st.answer.length) || (st.nWrong >= st.answer.length))
+
+      let newState = {...st};
+      newState.guessed = st.guessed.add(ltr);
+      newState.nWrong = st.nWrong + (st.answer.includes(ltr) ? 0 : 1);
+      console.log(`nWrong => ${newState.nWrong}`);
+      newState.nRight = this.guessedWord().filter(char => char != '_').length;
+      console.log(`nRight => ${newState.nRight}`);
+      newState.isLoser = (newState.nWrong >= st.answer.length);
+      console.log(`isLoser => ${newState.isLoser}`);
+      newState.isWinner = (newState.nRight == st.answer.length);
+      console.log(`isWinner => ${newState.isWinner}`);
+
+      if (newState.isLoser || newState.isWinner) {
+        newState.gameOver = true;
+      } else {
+        newState.gameOver = false;
+      }
+
+      console.log(`gameOver => ${newState.gameOver}`);
+
+      return newState;
+
+    });
   }
 
   /** generateButtons: return array of letter buttons to render */
   generateButtons() {
     return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
       <button
+        key={ltr}
         value={ltr}
         onClick={this.handleGuess}
-        disabled={this.state.guessed.has(ltr)}
+        disabled={this.state.guessed.has(ltr) || this.state.gameOver}
       >
         {ltr}
       </button>
@@ -63,6 +98,10 @@ class Hangman extends Component {
                 <h1>Hangman</h1>
                 <img src={this.props.images[this.state.nWrong]} />
                 <p className='Hangman-word'>{this.guessedWord()}</p>
+                <p>nWrong: {this.state.nWrong} nRight: {this.state.nRight}</p>
+                {this.state.isLoser ? <p>Loser!!!</p> : ''}
+                {this.state.isWinner ? <p>Winner!!!</p> : ''}
+                {/* <p>isLoser: {this.state.isLoser} isWinner: {this.state.isWinner}</p> */}
                 <p className='Hangman-btns'>{this.generateButtons()}</p>
             </div>
         </div>
