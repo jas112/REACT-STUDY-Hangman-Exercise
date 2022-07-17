@@ -131,8 +131,8 @@ class Hangman extends Component {
                 <p>{`${this.props.maxWrong - this.state.nWrong} / ${this.props.maxWrong} wrong guesses left.`}</p>
                 <p className='Hangman-word'>{this.guessedWord()}</p>
                 {/* <p>nWrong: {this.state.nWrong} nRight: {this.state.nRight}</p> */}
-                {this.state.isLoser ? <p>Loser!!!</p> : ''}
-                {this.state.isWinner ? <p>Winner!!!</p> : ''}
+                {this.state.isLoser ? <p>YOU HAVE LOST!!! <br/> THE ANSWER WAS: {this.state.answer}</p> : ''}
+                {this.state.isWinner ? <p>YOU ARE A WINNER!!!</p> : ''}
                 {/* <p>isLoser: {this.state.isLoser} isWinner: {this.state.isWinner}</p> */}
                 <p className='Hangman-btns'>{this.generateButtons()}</p>
             </div>
